@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/nostromo/CLionProjects/CryptoHW1/src/Feistel.cpp
+Feistel.h
+/Users/nostromo/CLionProjects/CryptoHW1/src/Feistel.h
+iostream
+-
+
+/Users/nostromo/CLionProjects/CryptoHW1/src/Feistel.h
+string
+-
+vector
+-
+Utils.h
+/Users/nostromo/CLionProjects/CryptoHW1/src/Utils.h
+
+/Users/nostromo/CLionProjects/CryptoHW1/src/Utils.h
+cstdint
+-
+vector
+-
+
