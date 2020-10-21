@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include "Feistel.h"
 
 struct Input {
     std::string filename;
@@ -10,19 +11,22 @@ struct Input {
 
 Input* processArgs(int argc, char** argv);
 std::vector<std::string> readFile(std::string filename);
+std::vector<Operation> initializeRoundFunction();
 
 int main(int argc, char** argv) {
     try {
         auto input = processArgs(argc, argv);
-        std::cout << "Filename: " << input->filename << std::endl;
-        std::cout << "Numbilets: " << input->numbilets << std::endl;
-        std::cout << "Parameter: " << input->parameter << std::endl;
 
         std::vector<std::string> studentNamesList = readFile(input->filename);
 
-        std::cout << "Students" << std::endl;
+        Feistel feistel(initializeRoundFunction());
         for(auto str : studentNamesList) {
-            std::cout << str << std::endl;
+            std::vector<uint8_t> vec(str.begin(), str.end());
+            std::vector<uint8_t> encrypted = feistel.encrypt(vec, input->parameter);
+            std::string encStr(encrypted.begin(), encrypted.end());
+            uint32_t encSize = encrypted.size();
+            uint32_t hash = toUint32(encrypted[encSize-4], encrypted[encSize-3], encrypted[encSize-2], encrypted[encSize-1]);
+            std::cout << str << ": " << hash % input->numbilets + 1 << std::endl;
         }
     } catch(std::exception &e) {
         std::cout << e.what() << std::endl;
@@ -67,4 +71,18 @@ std::vector<std::string> readFile(std::string filename) {
     }
 
     return fileLines;
+}
+
+std::vector<Operation> initializeRoundFunction() {
+    std::vector<Operation> operations;
+
+    operations.emplace_back(XOR, 0);
+    operations.emplace_back(SHL, 7);
+    operations.emplace_back(XOR, 0);
+    operations.emplace_back(SHL, 17);
+    operations.emplace_back(XOR, 0);
+    operations.emplace_back(SPLIT, 11);
+    operations.emplace_back(XOR, 0);
+
+    return operations;
 }
