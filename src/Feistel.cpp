@@ -11,13 +11,20 @@ std::vector<uint8_t> Feistel::encrypt(std::vector<uint8_t> data, uint32_t key) {
     uint32_t dataSize = data.size();
     if(dataSize % NUMBER_OF_BYTES != 0) {
         for(int i = 0; i < NUMBER_OF_BYTES - (dataSize % NUMBER_OF_BYTES); ++i) {
-            data.push_back(170u); // 10101010 in binary
+            if(dataSize > 0) {
+                uint8_t completionBlock = data[0];
+                for(int j = 1; j < dataSize && j < 10; ++j) {
+                    completionBlock ^= data[j];
+                }
+                data.push_back(completionBlock ^ (170u * (i + 1)));
+            } else {
+                data.push_back(170u * (i + 1)); // 10101010 in binary
+            }
         }
     }
 
     std::vector<uint8_t> encrypted;
-//    uint32_t encBlock = 2863311530u; // Вектор инициализации 1010101010...
-    uint32_t encBlock = 0;
+    uint32_t encBlock = 2863311530u; // Вектор инициализации 1010101010...
     for(int i = 0; i < data.size(); i += NUMBER_OF_BYTES) {
         encBlock = feistel(encBlock ^ toUint32(data[i], data[i+1], data[i+2], data[i+3]), key, ROUND_FUNCTION_ITERATIONS);
         std::vector<uint8_t> encBlockVec = fromUint32(encBlock);
