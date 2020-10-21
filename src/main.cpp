@@ -79,11 +79,11 @@ std::vector<Operation> initializeRoundFunction() {
     operations.emplace_back(XOR, 0);
     operations.emplace_back(SHL, 7);
     operations.emplace_back(XOR, 0);
-    operations.emplace_back(SHL, 2);
+    operations.emplace_back(SHL, 3);
     operations.emplace_back(XOR, 0);
     operations.emplace_back(SPLIT, 11);
     operations.emplace_back(XOR, 0);
-    operations.emplace_back(SPLIT, 8);
+    operations.emplace_back(SPLIT, 5);
 
     return operations;
 }

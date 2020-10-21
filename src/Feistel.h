@@ -28,6 +28,7 @@ public:
 private:
     uint32_t feistel(uint32_t data, uint32_t key, int numberOfIterations);
     uint16_t roundFunction(uint16_t data, uint16_t key);
+    uint16_t shuffleKey(uint16_t key);
     uint16_t applyOperation(Operation operation, uint16_t data, uint16_t key);
 
     std::vector<Operation> operations;
